@@ -1,13 +1,33 @@
 package com.sprint3.sprint3.DTO;
 
+import com.sprint3.sprint3.model.Car;
+import org.springframework.data.domain.Page;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class CarDto {
 
     private String chassi;
     private String modelo;
     private String marca;
     private String cor;
-    private Float valor;
-    private Integer anoFabricacao;
+    private BigDecimal valor;
+    private String anoFabricacao;
+
+    public CarDto(Car car){
+        this.chassi = car.getChassi();
+        this.modelo = car.getModelo();
+        this.marca = car.getMarca();
+        this.cor = car.getCor();
+        this.valor = car.getValor();
+        this.anoFabricacao = car.getAnoFabricacao();
+    }
+
+    public static Page<CarDto> convert(Page<Car> cars) {
+        return cars.map(CarDto::new);
+    }
 
     public String getChassi() {
         return chassi;
@@ -41,19 +61,19 @@ public class CarDto {
         this.cor = cor;
     }
 
-    public Float getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Float valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
-    public Integer getAnoFabricacao() {
+    public String getAnoFabricacao() {
         return anoFabricacao;
     }
 
-    public void setAnoFabricacao(Integer anoFabricacao) {
+    public void setAnoFabricacao(String anoFabricacao) {
         this.anoFabricacao = anoFabricacao;
     }
 }

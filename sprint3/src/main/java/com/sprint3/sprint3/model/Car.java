@@ -1,9 +1,8 @@
 package com.sprint3.sprint3.model;
 
-import com.sprint3.sprint3.DTO.CarDto;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 @Entity
 public class Car {
@@ -12,8 +11,19 @@ public class Car {
     private String modelo;
     private String marca;
     private String cor;
-    private Float valor;
-    private Integer anoFabricacao;
+    private BigDecimal valor;
+    private String anoFabricacao;
+
+    public Car(){}
+
+    public Car(String chassi, String modelo, String marca, String cor, BigDecimal valor, String anoFabricacao){
+        this.chassi = chassi;
+        this.modelo = modelo;
+        this.marca = marca;
+        this.cor = cor;
+        this.valor = valor;
+        this.anoFabricacao = anoFabricacao;
+    }
 
     public String getChassi() {
         return chassi;
@@ -47,28 +57,19 @@ public class Car {
         this.cor = cor;
     }
 
-    public Float getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Float valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
-    public Integer getAnoFabricacao() {
+    public String getAnoFabricacao() {
         return anoFabricacao;
     }
 
-    public void setAnoFabricacao(Integer anoFabricacao) {
+    public void setAnoFabricacao(String anoFabricacao) {
         this.anoFabricacao = anoFabricacao;
-    }
-
-    public CarDto toCarDto() {
-        CarDto carDto = new CarDto();
-        carDto.setCor(this.cor);
-        carDto.setModelo(this.modelo);
-        carDto.setMarca(this.marca);
-
-        return carDto;
     }
 }

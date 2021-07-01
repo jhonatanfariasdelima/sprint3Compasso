@@ -1,29 +1,44 @@
 package com.sprint3.sprint3.Controller;
 
 import com.sprint3.sprint3.DTO.CarDto;
+import com.sprint3.sprint3.form.CarForm;
+import com.sprint3.sprint3.form.FilterForm;
 import com.sprint3.sprint3.model.Car;
+import com.sprint3.sprint3.repository.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import java.util.Collections;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+import javax.validation.Valid;
+import java.net.URI;
 
 @Controller
 @RequestMapping("/api/cars")
 public class CarController {
 
+    @Autowired
+    CarRepository carRepository;
+
     @GetMapping
     @ResponseBody
-    public List<CarDto> listCars(){
-        Car car1 = new Car();
-        car1.setModelo("gol");
-        car1.setCor("azul");
-        car1.setMarca("volkswagem");
-
-        List<CarDto> cars = Collections.singletonList(car1.toCarDto());
-
-        return cars;
+    public Page<Car> listCars(FilterForm filterForm, Pageable pageable){
+        return carRepository.findAll(filterForm.toSpec(), pageable);
     }
 
+//    @GetMapping(path = {"/{cassi}"})
+//    public List<CarDto> listEspecificCar(String chassi){
+//        List<Car> cars = carRepository.findByChassi(chassi);
+//        return CarDto.convert(cars);
+//    }
+
+    @PostMapping
+    public ResponseEntity<CarDto> addCar(@RequestBody @Valid CarForm carForm, UriComponentsBuilder uriComponentsBuilder){
+        Car newCar = carForm.convert();
+        carRepository.save(newCar);
+        URI uri = uriComponentsBuilder.path("/api/cars/{chassi}").buildAndExpand(newCar.getChassi()).toUri();
+        return ResponseEntity.created(uri).body(new CarDto(newCar));
+    }
 }
