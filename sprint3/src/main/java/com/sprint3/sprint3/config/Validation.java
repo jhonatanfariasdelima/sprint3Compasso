@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,6 @@ public class Validation {
     public List<ErrorDto> handle(MethodArgumentNotValidException ex){
         List<ErrorDto> errorDto = new ArrayList<>();
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-
         fieldErrors.forEach(e -> {
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
             ErrorDto erro = new ErrorDto(e.getField(), mensagem);
@@ -34,5 +34,4 @@ public class Validation {
         });
         return errorDto;
     }
-
 }

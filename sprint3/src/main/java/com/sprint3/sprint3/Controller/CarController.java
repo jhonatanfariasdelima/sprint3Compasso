@@ -1,6 +1,7 @@
 package com.sprint3.sprint3.Controller;
 
 import com.sprint3.sprint3.DTO.CarDto;
+import com.sprint3.sprint3.DTO.ErrorDto;
 import com.sprint3.sprint3.form.CarForm;
 import com.sprint3.sprint3.form.FilterForm;
 import com.sprint3.sprint3.model.Car;
@@ -8,17 +9,18 @@ import com.sprint3.sprint3.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/cars")
 public class CarController {
-
     @Autowired
     CarRepository carRepository;
 
@@ -30,9 +32,15 @@ public class CarController {
 
     @PostMapping
     public ResponseEntity<CarDto> addCar(@RequestBody @Valid CarForm carForm, UriComponentsBuilder uriComponentsBuilder){
+        List<Car> duplicata = carRepository.findByChassi(carForm.getChassi());
         Car newCar = carForm.convert();
-        carRepository.save(newCar);
-        URI uri = uriComponentsBuilder.path("/api/cars?chassi={chassi}").buildAndExpand(newCar.getChassi()).toUri();
-        return ResponseEntity.created(uri).body(new CarDto(newCar));
+        if (!duplicata.isEmpty()){
+            String mensagem =  "chassi já cadastrado no banco de dados";
+            return new ResponseEntity(new ErrorDto(carForm.getChassi(), mensagem), HttpStatus.CONFLICT);
+        }else {
+            carRepository.save(newCar);
+            URI uri = uriComponentsBuilder.path("/api/cars?chassi={chassi}").buildAndExpand(newCar.getChassi()).toUri();
+            return ResponseEntity.created(uri).body(new CarDto(newCar));
+        }
     }
 }
