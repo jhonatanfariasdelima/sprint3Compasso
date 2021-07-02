@@ -14,6 +14,7 @@ public class FilterForm {
     private String cor;
     private String marca;
     private String valor;
+    private String chassi;
 
     public String getModelo() {
         return modelo;
@@ -65,8 +66,21 @@ public class FilterForm {
                 Predicate predicateCor = builder.equal(campoCor, cor);
                 predicados.add(predicateCor);
             }
+            if (chassi!=null){
+                Path<String> campoChassi = root.<String>get("chassi");
+                Predicate predicateChassi = builder.equal(campoChassi, chassi);
+                predicados.add(predicateChassi);
+            }
 
             return builder.and(predicados.toArray(new Predicate[0]));
         };
+    }
+
+    public String getChassi() {
+        return chassi;
+    }
+
+    public void setChassi(String chassi) {
+        this.chassi = chassi;
     }
 }

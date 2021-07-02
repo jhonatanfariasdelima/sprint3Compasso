@@ -28,17 +28,11 @@ public class CarController {
         return carRepository.findAll(filterForm.toSpec(), pageable);
     }
 
-//    @GetMapping(path = {"/{cassi}"})
-//    public List<CarDto> listEspecificCar(String chassi){
-//        List<Car> cars = carRepository.findByChassi(chassi);
-//        return CarDto.convert(cars);
-//    }
-
     @PostMapping
     public ResponseEntity<CarDto> addCar(@RequestBody @Valid CarForm carForm, UriComponentsBuilder uriComponentsBuilder){
         Car newCar = carForm.convert();
         carRepository.save(newCar);
-        URI uri = uriComponentsBuilder.path("/api/cars/{chassi}").buildAndExpand(newCar.getChassi()).toUri();
+        URI uri = uriComponentsBuilder.path("/api/cars?chassi={chassi}").buildAndExpand(newCar.getChassi()).toUri();
         return ResponseEntity.created(uri).body(new CarDto(newCar));
     }
 }
