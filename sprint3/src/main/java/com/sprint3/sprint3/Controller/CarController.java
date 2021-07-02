@@ -26,8 +26,15 @@ public class CarController {
 
     @GetMapping
     @ResponseBody
-    public Page<Car> listCars(FilterForm filterForm, Pageable pageable){
-        return carRepository.findAll(filterForm.toSpec(), pageable);
+    public ResponseEntity<Page<Car>> listCars(FilterForm filterForm, Pageable pageable){
+        Page<Car> list = carRepository.findAll(filterForm.toSpec(), pageable);
+        if (list.getTotalElements() == 0){
+            String mensagem =  "not found";
+            return new ResponseEntity(new ErrorDto("filtro", mensagem), HttpStatus.NOT_FOUND);
+        }else {
+            return ResponseEntity.ok(list);
+        }
+
     }
 
     @PostMapping
