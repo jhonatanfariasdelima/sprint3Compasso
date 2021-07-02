@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: API Car
+  description: API para o gerenciamento de carros por atributos
+  version: 1.0.0
+  contact:
+    name: desenvolvedores
+    email: jhonatan.lima_bols@compasso.com.br
+externalDocs:
+  description: Documentação (README)
+  url: 'https://github.com/jhonatanfariasdelima/sprint3Compasso/blob/main/README.md'
+servers:
+  - url: 'http://localhost:8080/api'
+    description: API cars
+paths:
+  /cars:
+    get:
+      summary: Apresenta todos os dados cadastrados no banco
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chassi:
+                    type: string
+                  modelo:
+                    type: string
+                  marca:
+                    type: string
+                  cor:
+                    type: string
+                  ano_fabricacao:
+                    type: string
+                  valor:
+                    type: number
+  /cars/:
+    get:
+      summary: >-
+        Apresenta os dados cadastrados no banco buscando por um chassi
+        especifico
+      parameters:
+        - name: chassi
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: modelo
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: marca
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: cor
+          in: query
+          schema:
+            type: string
+          requered: false
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chassi:
+                    type: string
+                  modelo:
+                    type: string
+                  marca:
+                    type: string
+                  cor:
+                    type: string
+                  ano_fabricacao:
+                    type: string
+                  valor:
+                    type: number
+        '401':
+          description: não encontrado
+          content:
+            application/json:
+              example: Not Found
