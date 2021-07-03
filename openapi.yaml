@@ -15,7 +15,7 @@ servers:
 paths:
   /cars:
     get:
-      summary: Apresenta todos os dados cadastrados no banco
+      summary: Apresenta todos os veículos cadastrados na base de dados
       responses:
         '200':
           description: Sucesso
@@ -36,32 +36,118 @@ paths:
                     type: string
                   valor:
                     type: number
+                  dados_pagina:
+                    type: object
+        '401':
+          description: item não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campo:
+                    type: string
+                  mensagem:
+                    type: string
+    post:
+      summary: adiciona um novo veículo a base de dados
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties: 
+                chassi:
+                  type: string
+                modelo:
+                  type: string
+                marca:
+                  type: string
+                cor:
+                  type: string
+                valor:
+                  type: number
+                ano_fabricacao:
+                  type: string
+      responses:
+        '201':
+          description: cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chassi:
+                    type: string
+                  modelo:
+                    type: string
+                  marca:
+                    type: string
+                  cor:
+                    type: string
+                  anoFabricacao:
+                    type: string
+                  valor:
+                    type: number
+        '409':
+          description: duplicado (erro)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campo:
+                    type: string
+                  erro:
+                    type: string
+        '400':
+          description: estrutural (erro)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campo:
+                    type: string
+                  erro:
+                    type: string
+                    
   /cars/:
+    parameters:
+      - name: chassi
+        in: query
+        schema:
+          type: string
+        requered: false
+      - name: modelo
+        in: query
+        schema:
+          type: string
+        requered: false
+      - name: marca
+        in: query
+        schema:
+          type: string
+        requered: false
+      - name: cor
+        in: query
+        schema:
+          type: string
+        requered: false
+      - name: sort
+        in: query
+        schema:
+          type: string
+        requered: false
+      - name: size
+        in: query
+        schema:
+          type: string
+        requered: false
     get:
       summary: >-
-        Apresenta os dados cadastrados no banco buscando por um chassi
+        Apresenta os dados cadastrados no banco buscando por um filtro
         especifico
-      parameters:
-        - name: chassi
-          in: query
-          schema:
-            type: string
-          requered: false
-        - name: modelo
-          in: query
-          schema:
-            type: string
-          requered: false
-        - name: marca
-          in: query
-          schema:
-            type: string
-          requered: false
-        - name: cor
-          in: query
-          schema:
-            type: string
-          requered: false
       responses:
         '200':
           description: Sucesso
@@ -82,8 +168,17 @@ paths:
                     type: string
                   valor:
                     type: number
+                    format: float  
+                  dados_pagina:
+                    type: object
         '401':
-          description: não encontrado
+          description: item não encontrado
           content:
             application/json:
-              example: Not Found
+              schema:
+                type: object
+                properties:
+                  campo:
+                    type: string
+                  mensagem:
+                    type: string
