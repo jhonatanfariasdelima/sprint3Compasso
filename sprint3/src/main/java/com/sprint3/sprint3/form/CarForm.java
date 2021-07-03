@@ -1,7 +1,6 @@
 package com.sprint3.sprint3.form;
-import com.sprint3.sprint3.model.Car;
-import org.hibernate.validator.constraints.Length;
 
+import com.sprint3.sprint3.model.Car;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 

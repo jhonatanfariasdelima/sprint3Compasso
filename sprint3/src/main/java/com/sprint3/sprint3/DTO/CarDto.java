@@ -2,10 +2,7 @@ package com.sprint3.sprint3.DTO;
 
 import com.sprint3.sprint3.model.Car;
 import org.springframework.data.domain.Page;
-
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CarDto {
 

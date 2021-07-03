@@ -7,7 +7,6 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class FilterForm {
 
     private String modelo;
@@ -71,7 +70,6 @@ public class FilterForm {
                 Predicate predicateChassi = builder.equal(campoChassi, chassi);
                 predicados.add(predicateChassi);
             }
-
             return builder.and(predicados.toArray(new Predicate[0]));
         };
     }

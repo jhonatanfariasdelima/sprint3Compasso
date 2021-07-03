@@ -14,171 +14,147 @@ servers:
     description: API cars
 paths:
   /cars:
-    get:
-      summary: Apresenta todos os veículos cadastrados na base de dados
-      responses:
-        '200':
-          description: Sucesso
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  chassi:
-                    type: string
-                  modelo:
-                    type: string
-                  marca:
-                    type: string
-                  cor:
-                    type: string
-                  ano_fabricacao:
-                    type: string
-                  valor:
-                    type: number
-                  dados_pagina:
-                    type: object
-        '401':
-          description: item não encontrado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  campo:
-                    type: string
-                  mensagem:
-                    type: string
     post:
-      summary: adiciona um novo veículo a base de dados
+      summary: 'Adiciona um novo veículo a base de dados'
       requestBody:
         content:
           application/json:
-            schema: 
+            schema:
               type: object
-              properties: 
+              properties:
                 chassi:
                   type: string
+                  example: 115ASD215SDF478SDF
                 modelo:
                   type: string
+                  example: modelX
                 marca:
                   type: string
+                  example: tesla
                 cor:
                   type: string
+                  example: prata
                 valor:
                   type: number
-                ano_fabricacao:
+                  example: 100.99
+                anoFabricacao:
                   type: string
+                  example: '2011'
       responses:
         '201':
           description: cadastrado com sucesso
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  chassi:
-                    type: string
-                  modelo:
-                    type: string
-                  marca:
-                    type: string
-                  cor:
-                    type: string
-                  anoFabricacao:
-                    type: string
-                  valor:
-                    type: number
-        '409':
-          description: duplicado (erro)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  campo:
-                    type: string
-                  erro:
-                    type: string
+                $ref: '#/components/schemas/sucessoResp'
         '400':
           description: estrutural (erro)
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  campo:
-                    type: string
-                  erro:
-                    type: string
-                    
-  /cars/:
-    parameters:
-      - name: chassi
-        in: query
-        schema:
-          type: string
-        requered: false
-      - name: modelo
-        in: query
-        schema:
-          type: string
-        requered: false
-      - name: marca
-        in: query
-        schema:
-          type: string
-        requered: false
-      - name: cor
-        in: query
-        schema:
-          type: string
-        requered: false
-      - name: sort
-        in: query
-        schema:
-          type: string
-        requered: false
-      - name: size
-        in: query
-        schema:
-          type: string
-        requered: false
+                $ref: '#/components/schemas/erroResp'
+        '409':
+          description: duplicado (erro)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/erroResp'
     get:
       summary: >-
         Apresenta os dados cadastrados no banco buscando por um filtro
-        especifico
+        especifico ou não
+      parameters:
+        - name: chassi
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: modelo
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: marca
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: cor
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: sort
+          in: query
+          schema:
+            type: string
+          requered: false
+        - name: size
+          in: query
+          schema:
+            type: string
+          requered: false
       responses:
         '200':
           description: Sucesso
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  chassi:
-                    type: string
-                  modelo:
-                    type: string
-                  marca:
-                    type: string
-                  cor:
-                    type: string
-                  ano_fabricacao:
-                    type: string
-                  valor:
-                    type: number
-                    format: float  
-                  dados_pagina:
-                    type: object
+                $ref: '#/components/schemas/sucessoResp'
         '401':
           description: item não encontrado
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/erroResp'
+    delete:
+      summary: 'Deleta um veículo especifico, difinido pelo chassi'
+      parameters:
+        - name: chassi
+          in: query
+          schema:
+            type: string
+          requered: true
+      responses:
+        '200':
+          description: item deletado com sucesso
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  campo:
-                    type: string
                   mensagem:
                     type: string
+        '401':
+          description: item não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/erroResp'
+components:
+  schemas:
+    erroResp:
+      type: object
+      properties:
+        campo:
+          type: string
+        mensagem:
+          type: string
+    sucessoResp:
+      type: object
+      properties:
+        chassi:
+          type: string
+        modelo:
+          type: string
+        marca:
+          type: string
+        cor:
+          type: string
+        ano_fabricacao:
+          type: string
+        valor:
+          type: number
+          format: float
+        dados_pagina:
+          type: object

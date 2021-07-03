@@ -15,8 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/cars")
@@ -47,6 +49,19 @@ public class CarController {
             carRepository.save(newCar);
             URI uri = uriComponentsBuilder.path("/api/cars?chassi={chassi}").buildAndExpand(newCar.getChassi()).toUri();
             return ResponseEntity.created(uri).body(new CarDto(newCar));
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> removeCar(String chassi){
+        List<Car> list = carRepository.findByChassi(chassi);
+        if (list.isEmpty()){
+            String mensagem =  "item não encontrado";
+            return new ResponseEntity(new ErrorDto("delet", mensagem), HttpStatus.NOT_FOUND);
+
+        }else {
+            carRepository.deleteById(chassi);
+            return ResponseEntity.ok().body("item deletado com sucesso");
         }
     }
 }
