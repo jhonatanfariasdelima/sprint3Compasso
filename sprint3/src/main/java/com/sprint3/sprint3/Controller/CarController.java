@@ -29,12 +29,11 @@ public class CarController {
     public ResponseEntity<Page<Car>> listCars(FilterForm filterForm, Pageable pageable){
         Page<Car> list = carRepository.findAll(filterForm.toSpec(), pageable);
         if (list.getTotalElements() == 0){
-            String mensagem =  "not found";
+            String mensagem =  "item não encontrado";
             return new ResponseEntity(new ErrorDto("filtro", mensagem), HttpStatus.NOT_FOUND);
         }else {
             return ResponseEntity.ok(list);
         }
-
     }
 
     @PostMapping
