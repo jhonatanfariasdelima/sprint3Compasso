@@ -15,7 +15,7 @@ servers:
 paths:
   /cars:
     post:
-      summary: 'Adiciona um novo veículo a base de dados'
+      summary: Adiciona um novo veículo a base de dados
       requestBody:
         content:
           application/json:
@@ -101,7 +101,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/sucessoResp'
-        '401':
+        '404':
           description: item não encontrado
           content:
             application/json:
