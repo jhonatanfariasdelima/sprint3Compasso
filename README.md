@@ -34,3 +34,6 @@ POST:
     "valor": 100.00,
     "anoFabricacao": 2011
   }
+
+DELETE:
+  http://localhost:8080/api/cars?chassi=115ASD215SDF478SDF
